@@ -1,0 +1,2059 @@
+MASTER PROMPT: DETAILED REAL-BUILDING RECONSTRUCTION IN UNITY
+Version 1.0 | Prepared 6 November 2026
+Reference project: Cal Poly Pomona, Building 9, Engineering Building
+Reference generator snapshot: v6.9.1
+
+BEGIN INSTRUCTIONS TO THE MODEL RECEIVING THIS FILE
+
+You are being asked to reconstruct a real building in Unity from the plans,
+photographs, screenshots, observations, and existing project files supplied
+with this prompt. Perform the reconstruction and deliver the requested usable
+files. Do not merely summarize this document or explain that reconstruction
+is possible. Treat this prompt as a detailed production brief and acceptance
+specification intended to prevent avoidable rounds of corrections.
+
+The primary goal is a detailed, coherent, navigable building that closely
+matches its actual evidence on the first substantial delivery. A few targeted
+questions or final corrections are acceptable. Repeated discoveries of
+blocked stairs, inaccessible rooms, wrong doors, overlapping walls, hidden
+windows, misregistered floors, or missing storeys are not an acceptable normal
+workflow. Inspect and test your own interpretation before asking the user to
+find those errors in Unity.
+
+This file deliberately contains both a reusable method and a detailed history
+of one reference building. The reusable requirements apply to a new project.
+The Building 9 case study applies literally ONLY when the requested building
+is that building. For another building, transfer the quality standards,
+reasoning, failure-prevention rules, feature categories, and tool behavior;
+derive its geometry, number of floors, room names, entrances, stair routes,
+terrain, furniture, and appearance from that new building's evidence.
+
+Do not accidentally make every new building six storeys tall, give it a
+piano, use the same room numbers, impose a north-side entrance on Floor 2,
+or copy the reference project's assumed floor height. Those are case-specific
+facts or modeling choices, not universal architectural requirements.
+
+Scope: architectural reconstruction, building geometry, building-generation
+code, inspection tools, documentation, and installation. Unrelated runtime
+demos, character behavior, tracking systems, and other gameplay systems are
+outside this task unless separately requested. Keep architectural code
+independent of such systems.
+
+This English specification does not contain the source plan images or all
+metric mesh coordinates of Building 9. It cannot replace those attachments.
+For a new building, the new plans and references are essential. To continue
+the reference building exactly, obtain its plans and latest generator too.
+Never claim to have seen an attachment merely because its filename appears
+in this document.
+
+
+PART I. PROJECT CONTRACT AND EVIDENCE
+====================================
+
+1. DETERMINE THE ACTIVE PROJECT WITHOUT UNNECESSARY BACK-AND-FORTH
+
+Use any project brief accompanying this prompt. Otherwise infer what is
+explicit in the supplied attachments and ask only for genuinely missing,
+material information. Do not ask again for facts already provided.
+
+Resolve these fields:
+- Building identity and the parts of the site being reconstructed.
+- Whether this is a new reconstruction or a correction to an existing model.
+- Which floors, roof levels, penthouses, wings, exterior stairs, and grounds
+  are currently requested. The latest explicit scope controls.
+- The available plan sheets and which floor diagrams each sheet contains.
+- Unity version and render pipeline, when known or material to compatibility.
+- Whether the user wants a standalone generator, a prefab, a scene, other
+  assets, or a combination. A complete downloadable C# generator is the
+  preferred reference-project delivery style.
+- Known dimensions, units, survey information, floor-to-floor elevations,
+  wall thicknesses, window elevations, and exterior grade levels.
+- Source photographs, compass information, annotated screenshots, and the
+  user's firsthand observations of the real building.
+- Existing code, current generated scene, and features that must survive an
+  update.
+- Desired model detail and practical walking/collision assumptions.
+
+If this prompt arrives with no actual building plans or usable references,
+ask for those essential inputs in one concise message. Do not generate an
+invented substitute building and call it a reconstruction. If the evidence
+is sufficient, proceed with the work rather than repeatedly asking permission
+for routine modeling, file creation, analysis, or reversible fixes within the
+authorized project scope.
+
+Ask early about uncertainties that change topology or registration, such as
+an unidentified floor, conflicting stair directions, missing vertical
+elevations, or an ambiguous exterior entrance. Batch related questions.
+Continue independent work while awaiting information. Do not ask the user to
+locate every ordinary door for you when it is visible in the plan.
+
+Unknown decorative details are not a reason to stop all work. Use clearly
+identified, editable estimates where appropriate. Unknown critical details
+must not be silently converted into confident statements of exact accuracy.
+
+
+2. SOURCE PRIORITY AND CONFLICT HANDLING
+
+Separate evidence from implementation. A plausible generated model is not
+proof of what the real building contains. An old script can preserve an old
+mistake.
+
+Use this practical priority order while checking for conflicts:
+1) The user's latest explicit, firsthand correction about this building.
+2) Relevant measured dimensions, surveyed elevations, sections, or reliable
+   architectural drawings, with their dates and scope understood.
+3) Current, clearly identified photographs and observed physical conditions.
+4) The supplied plan's actual linework, symbols, labels, and legend, interpreted
+   in context and at sufficient resolution.
+5) Existing model data, useful as an inventory and implementation reference.
+6) Explicit modeling assumptions for information the sources do not contain.
+
+This is not permission to ignore contradictions between stronger sources.
+For example, an old room map and a current firsthand observation may describe
+different renovation states. Identify the discrepancy, select the intended
+state with the user when necessary, and record the decision.
+
+For each significant feature, track one of these statuses:
+- User-confirmed physical observation.
+- Directly traced from a particular plan or detail.
+- Derived from registered correspondence between floors.
+- Estimated from identified photographs.
+- Provisional modeling assumption.
+- Conflicting or unresolved evidence requiring a targeted question.
+
+Keep an assumptions and decision ledger. State the source, confidence,
+reasoning, affected geometry, and whether later confirmation could change it.
+Do not upgrade an assumption to a fact merely because it survived several
+script versions. Later corrections override superseded earlier instructions;
+preserve their history only to explain why the final interpretation differs.
+
+
+3. ACTUALLY OPEN AND INSPECT THE INPUTS
+
+Inventory all accessible files. Use the file copies and access methods that
+are actually available in the environment. If an old attachment path is
+missing, resolve an available copy or ask for the missing essential file.
+Do not repeatedly reference a nonexistent local path as if it had been read.
+
+For every plan:
+- Identify the floor, scale information, compass, legend, revision/date, and
+  the portion of the building shown.
+- Determine whether the file is a vector PDF, scanned image, photograph,
+  cropped map, combined sheet, or simplified facilities room diagram.
+- Inspect the whole sheet and enlarged crops of complex cores, doors, stair
+  breaks, elevator banks, service rooms, exterior approaches, and setbacks.
+- When vector PDF data is available, use its linework, fills, text, and drawing
+  order to support precise extraction. Still inspect rendered views.
+- When raster input is all that is available, use careful tracing and scale
+  calibration. OCR can help find labels but must not decide geometry alone.
+- Recognize that a combined PDF can contain several separate diagrams, such
+  as a main floor and a small penthouse plan. PDF page number is not the same
+  thing as building floor number.
+
+Honor PDF clipping, transformed drawing coordinates, and opaque overpainting
+order. An earlier hidden stroke must not reappear as a physical wall just
+because a vector extraction listed it. Source text, colors, and linework
+must be interpreted together rather than as independent unconditional solids.
+
+Do not trace only the visible thumbnail or an OCR summary. Do not assume that
+all black strokes are full-height walls. Resolve column symbols, door marks,
+stair treads, break lines, railings, arrows, reference lines, glazing, roof
+outlines, and annotation graphics using context and the legend.
+
+Preserve the input files. Work on copies or derived records. Keep source
+references traceable so a correction can be compared to the exact location
+that produced the geometry.
+
+
+4. DISTINGUISH ROOM MAPS FROM MEASURED CONSTRUCTION DRAWINGS
+
+A room-layout map may be excellent evidence for adjacency, room identity,
+door location, and approximate footprints while omitting precise vertical
+geometry. A printed scale does not necessarily make a cropped or resized
+screenshot metrically reliable. Stair symbols may be schematic.
+
+Never claim exact real-world window sill elevations, stair rises, floor
+heights, terrain contours, roof construction, or hidden structural dimensions
+unless the evidence supports those claims. Exact plan tracing alone does not
+establish those vertical quantities.
+
+Prefer dimensions, sections, elevations, surveys, and known physical lengths.
+If they are missing, ask for the few most useful measurements or expose clearly
+named assumptions. Continue developing the plan-faithful portions. The user
+should be able to revise a height estimate without destroying room alignment.
+
+Accuracy and practical access are both requirements. Do not distort a verified
+plan to satisfy an arbitrary generic stair template. If verified conditions
+are unusual, retain and identify them. If a provisional interpretation creates
+an impossible route, correct the interpretation or ask about the controlling
+dimension instead of declaring that the oddity must exist in real life.
+
+
+5. BUILD A SOURCE-BASED FEATURE INVENTORY BEFORE MESH GENERATION
+
+Create a structured inventory that can be checked independently of the final
+render. For each floor include:
+- True occupied footprint, actual setbacks, wings, connectors, and courtyards.
+- Room polygons, room identifiers, suffixes, service labels, and categories.
+- Corridor polygons, lobbies, vestibules, shared approaches, and circulation
+  spaces that must remain open.
+- Wall centerlines or wall solids with thickness and height information.
+- Every door or traversable opening, including which spaces it joins.
+- Stair shaft boundaries, flights, intermediate and floor-level landings,
+  entry/exit portals, continuation or termination, and guard requirements.
+- Elevator shafts, cabin positions, corridor-facing openings, and served floors.
+- Windows, glazing groups, façade bays, posts, piers, panel bands, and sills.
+- Floor slabs and the actual openings needed for vertical circulation.
+- Roofs, terraces, penthouse areas, service platforms, parapets, and roof exits.
+- Outdoor entries, stairs, porches, paving, grade transitions, and furniture.
+- Source references, assumptions, and unresolved details.
+
+Use unique internal identifiers. Room numbers may repeat in labels or be
+accompanied by nonnumeric labels such as Men, Women, or HVAC. Two restrooms
+with the same displayed label are not one object. Preserve room suffixes and
+small subdivisions; a room such as 244A is not interchangeable with 244.
+
+Do not interpret a room label's bounding box as its wall boundary. Do not
+collapse a complicated suite into one large rectangle because its rooms share
+a color. Preserve the source legend while keeping physical geometry separate
+from the map's category coloring.
+
+Build each floor from its own evidence. Do not copy one level repeatedly,
+increment room numbers, and infer that the building is complete. Repeated
+plans still need floor-specific door, room, shaft, setback, stair, and roof
+exceptions checked. Ask for a genuinely missing floor rather than silently
+inventing it, unless the user explicitly authorizes an approximate stand-in.
+
+
+PART II. REGISTRATION, GEOMETRY, AND CIRCULATION
+===============================================
+
+6. REGISTER ALL FLOORS TO ONE BUILDING COORDINATE SYSTEM
+
+Choose and document a single world origin, horizontal axes, north direction,
+unit conversion, and vertical datum. Normally use one Unity unit per metre.
+Provide a visible or documented north reference in the generated scene.
+
+Unity's Scene-view X/Y/Z gizmo indicates world axes, not geographic north
+until their relationship has been established. Translate between the plan
+compass, the chosen Unity axes, and the actual photo/camera viewpoint.
+
+Do not assume equal storey heights when the evidence shows otherwise. Store
+actual finished-floor elevations and any split-level or mezzanine offsets;
+derive each stair's rise from its departure and arrival datums. Basement,
+ground, mezzanine, and numbered-floor identifiers should not be confused
+with simple array indices.
+
+Determine the compass orientation on each source independently. Do not assume
+that the top of an image is north. Account for the inverted vertical axis of
+image coordinates. Distinguish world directions from left/right on a page or
+left/right from a particular camera position.
+
+Register sheets using multiple trustworthy correspondences: elevator shafts,
+stair cores, repeated structural axes, known exterior planes, measured
+dimensions, and recognizable corners. Do not align a floor using one stair
+alone and ignore the exterior. Check both interior and exterior constraints.
+
+Do not independently scale every floor to its image bounds. Different crops,
+white margins, annotation extents, scan sizes, or room-map distortions must
+not make the completed building look like offset or differently sized blocks.
+Do not use separate arbitrary Unity Transform scales for different storeys.
+
+Use the least complicated registration justified by the evidence. True metric
+plans normally need consistent transforms, not arbitrary warping. If schematic
+sheets have incompatible distortions, carefully documented local or per-wing
+registration may be necessary. Preserve known stair/elevator anchors and wall
+planes, verify room and door geometry after adjustment, and do not disguise a
+real source conflict with unexplained deformation.
+
+The desired result is alignment of:
+- Exterior wall and façade planes that genuinely continue between levels.
+- Stair shafts, elevator shafts, and vertical structural relationships.
+- Corridors, doorway thresholds, intermediate landings, and connecting wings.
+- Floor and roof edges where the real structure has no setback.
+
+Preserve real differences: a smaller penthouse, a two-storey wing, a setback,
+a bridge, or a recessed entrance must not be expanded just to make every
+floor bounding box identical. Registration means agreeing on shared physical
+features, not forcing identical footprints.
+
+Apply whole-building relocation, rotation, and uniform scale to the entire
+building consistently, including stairs, site interfaces, furniture, roofs,
+reference overlays, and collision geometry. Retain the existing root placement
+when updating an already placed generated building unless instructed otherwise.
+
+
+7. SOLVE THE BUILDING AS A CONNECTED SPACE GRAPH
+
+Represent rooms, corridors, vestibules, exterior approaches, stair landings,
+terraces, and elevator lobbies as spaces. Represent doors, open passages, and
+vertical connections as explicit links. Store the physical aperture and
+elevation for each link, not just a pair of room names.
+
+Every normal occupied or service room needs an evidence-supported access
+route. Every modeled entrance should lead somewhere meaningful. A visible
+hole in a wall is not necessarily a usable doorway, and a doorway under a
+flight is not acceptable if it leads only to an inaccessible wedge.
+
+Check the graph both horizontally and vertically. Distinguish an intentionally
+separate storage cupboard from a second stair entrance that should join a
+common landing. Do not connect separate rooms by erasing their walls merely
+to make a graph search pass.
+
+Where a door is genuinely missing from the evidence, use surrounding service
+logic and photographs to propose the least disruptive route. Record the choice
+as provisional. Do not invent access through a stair flight, an elevator
+shaft, a sealed wall, a drop, or an unrelated occupied room.
+
+Explicitly account for external circulation between wings. A room-access test
+that ignores a required breezeway, outdoor apron, or raised exterior path is
+incomplete. Conversely, do not let a pathfinder cross arbitrary terrain,
+through walls, or over an open well just because the geometry is not being
+represented accurately in the test.
+
+
+8. GENERATE COHERENT WALLS AND REAL OPENINGS
+
+Use a consistent wall representation. Shared partitions belong to a coherent
+wall graph or correctly combined wall solids. Avoid generating a complete
+independent wall on both sides of every room and leaving duplicate surfaces,
+overlapping thicknesses, or mismatched door cuts.
+
+Preserve the actual source linework, including returns, alcoves, small utility
+rooms, passage widths, elevator/stair adjacency, and nonrectangular outlines.
+Use proper intersection cleanup and triangulation. Remove accidental
+geometric duplicates without merging distinct rooms or deleting intentional
+thin partitions.
+
+Door and window apertures must be actual openings through every opaque layer
+that occupies the opening. Create the surrounding jambs, sills, lintels, and
+wall returns appropriately. Do not attach a glass rectangle to an uncut wall
+and call it a window. Do not leave a second outside wall hiding the opening.
+
+Create volumetric wall meshes with valid caps, side faces, normals, and
+collision surfaces. Inspect interior and exterior faces. Correct winding and
+backface visibility deliberately; do not rely on an incorrect mesh looking
+acceptable from one camera angle.
+
+Under-stair partitions need the correct profile and vertical range. A wall
+supporting or enclosing an outgoing flight must not also hang across the head
+space of the incoming flight beneath it. Keep the legitimate neighboring room
+enclosure; trim or replace only the erroneous intrusion in the stair volume.
+
+Do not patch every visible hole by filling it. Classify it first as a door,
+window, stair opening, vent, courtyard, roof opening, intended setback, or
+actual modeling error. Close only unintended gaps, and preserve legitimate
+architectural openings.
+
+
+9. FLOOR SLABS, FINISHES, AND THRESHOLDS
+
+Provide continuous physical support for rooms, corridors, shared entrance
+landings, lobbies, and required exterior approaches. Include a floor between
+storeys. Do not leave corridors as unsupported colored surfaces.
+
+Cut stair openings from the actual three-dimensional walking and headroom
+envelopes. Stair symbols alone are not a sufficient slab-cut mask. Landings,
+approach transitions, and adjacent flights also matter. Conversely, do not
+remove broad room-floor areas to create excessive open voids.
+
+Stop an opening exactly at the receiving stair threshold where appropriate.
+Extending a hole a few centimetres beyond the last riser creates a crack
+between the stair and the floor. Adding an unnecessary solid cap at that same
+boundary can create a barrier. Check both support and clearance at the seam.
+
+Keep physical slabs distinct from surface finishes. Clip finishes to their
+intended room areas and supported floor regions. Use a controlled small offset
+where needed to avoid coplanar flicker; do not stack multiple floor surfaces
+at the same height or cover an open shaft with a decorative finish.
+
+If a service platform or exterior porch is raised, its doorway, internal
+approach, steps, guards, and surrounding grade must all use that elevation.
+Do not adjust one visible mesh while leaving the collider or door threshold
+at the original height.
+
+
+10. STAIR NETWORK: SOLVE CONTINUITY BEFORE MAKING STEPS
+
+Assign a persistent identifier to each stair core. For every inter-floor
+connection record:
+- Departure floor, arrival floor, and whether the stair continues farther.
+- Exact departure and arrival positions and elevations.
+- Direction of ascent, turn direction, and type of turn.
+- Flight width, usable width between handrails, run, rise, and riser count.
+- Intermediate landing polygon and its elevation.
+- Floor-level approach/arrival landing and the doors it serves.
+- Shaft enclosure, neighboring room walls, open-lobby exceptions, and guards.
+- Stairwell openings in all relevant slabs and roofs.
+- Exterior discharge, porch, small ground steps, and their relation to grade.
+
+A continuous route must connect the corridor door to the first tread, the
+first flight to the turn landing, the turn landing to the next flight, the
+last tread to the receiving floor, and that floor to the intended exits and
+hallways. Verify both ascent and descent.
+
+An ordinary U stair has two opposed flights joined by a genuinely level turn
+landing. The walking path turns 180 degrees; it is not a ramped wedge, a
+diagonal crossover, two flights that miss each other, or a vertical wall
+masquerading as a landing.
+
+An L stair has two perpendicular flights and a clear quarter-turn landing.
+Match the observed ascent direction and handedness. If the first flight is
+shorter than the second, distribute risers coherently; do not force an equal
+half-storey rise into a short first run and create a very steep flight.
+
+A single-flight stair with a side discharge must remain a single-flight
+stair. Do not insert a generic U return merely because most other cores use
+that arrangement. A stair may change type at a particular level or terminate
+under a lower wing roof. Model those exceptions explicitly.
+
+Do not interpret a diagonal stair break, cut line, direction arrow, or partial
+stair symbol as the physical end of a flight without checking the shaft and
+adjacent floor. In the reference project this mistake shortened a lower run
+beside Room 114 and produced an uneven U stair.
+
+Keep the stair inside its evidenced shaft and preserve adjacent rooms. Do not
+quietly enlarge the entire building, raise a verified storey height, or erase
+a room to accommodate a generic stair asset. Resolve source and measurement
+uncertainties openly when geometry cannot satisfy all constraints.
+
+Calculate a consistent total rise and appropriate integer riser counts.
+Use coherent riser heights and tread spacing, with level landings at the
+correct elevation. Avoid a floating first step, a sunken exterior flight,
+unequal accidental risers, or a top step above or below the arrival slab.
+
+Prefer shallow, properly modeled tread/deck solids over stacking giant cubes
+that fill the whole shaft and block legitimate space underneath. Treat any
+walkability helper or simplified stair collider as an explicit design choice;
+it must not conceal a visibly blocked or geometrically impossible stair.
+
+
+11. STAIR CLEARANCE: TEST THE WHOLE HUMAN ROUTE
+
+Use an explicit walking envelope appropriate to model scale and intended use.
+The reference model adopted 2.10 m of model headroom and approximately a
+0.50-0.60 m central walking width for its checks. Those are modeling targets,
+not proof of regulatory compliance or universal dimensions for another site.
+Use real dimensions and project requirements when available.
+
+Recompute and recheck dependent stairs, landings, doorway heads, slab cuts,
+roof interfaces, and collision clearances when structural parameters change.
+A slab opening baked for one storey height is not automatically valid at
+another height or slab depth. An exposed UI range does not prove every value
+produces a usable building. Recompute correctly or reject the unsafe setting
+with a useful error while preserving the previous model; do not turn off
+validation just to make generation report success.
+
+Headroom must be measured above the actual standing surface at each tread and
+landing, not above a smooth centerline alone. Test the first and last tread,
+several locations along each tread, and lateral offsets across the walking
+lane. Include the entire U or L turn and the level floor approaches.
+
+Relevant obstructions include every applicable solid, not only the upper
+floor slab: same-floor lintels, doorway heads, traced walls, under-stair
+partitions, intermediate landings, adjacent flights, roof slabs, beams,
+handrails, posts, and other collision geometry.
+
+A previous failed approach accepted about 1.88 m between a 2.10 m half-storey
+landing and a slab underside at 3.98 m. It checked only treads against one
+ceiling set, and used a test threshold below the intended human clearance.
+Do not repeat that logic. A sensible-looking floor plate can still create a
+head strike at the turn.
+
+Open the verified stair shaft above the route where necessary. Preserve solid
+flooring where a floor-level corridor or shared landing belongs. Do not
+indiscriminately fill all openings, and do not open cuts into colored occupied
+room footprints without evidence and a deliberate architectural decision.
+
+Check support beneath every walking sample. A clear overhead ray is not a
+complete pass if the sample is over a hole. Inspect threshold cracks and the
+interfaces between slabs, landings, and treads with adequate numeric tolerance.
+
+Ensure collision tests handle points starting inside geometry and do not
+silently miss obstructions because of ray direction, backfaces, stale physics
+transforms, disabled groups, missing colliders, or the wrong layer mask.
+Keep the tested collision representation consistent with the visible mesh.
+
+Also check a person-width path around each U turn, not merely that the landing
+has nonzero area. Verify that enclosure walls and railings leave a usable
+turning route between the two flight openings.
+
+
+12. GUARDS AND HANDRAILS MUST NEVER SEAL THE WALKING OPENING
+
+Classify every landing or well edge before placing a rail:
+- Exposed drop edge that needs a guard.
+- Edge already protected by a real wall or other verified enclosure.
+- Flight entry or exit that must remain open.
+- A doorway, corridor connection, or shared approach that must remain open.
+
+Do not generate a full guard across every polygon edge and hope the stairs
+will still be usable. Subtract the actual walking gates from the guard spans.
+An edge shared with two flights needs two separate openings, with any genuine
+intervening drop protected. A blanket deletion of all rails is not a solution.
+
+Keep side handrails, rear/outer turn rails, and legitimate well-edge guards.
+Connect handrail heights across flights and level landings. Posts should meet
+the rail rather than protrude above it. Avoid isolated red posts, floating
+bars, disconnected pieces, or rails crossing the center of the landing.
+
+Extend the analysis beyond the first riser. A rail only a few centimetres in
+front of the first step can block every ascending route while every tread
+sample remains clear. Similarly, a crossbar just beyond the last tread can
+seal an otherwise correctly generated arrival.
+
+The reference project's specific regression was a guard inset roughly
+0.045 m from a slab edge while a projected flight-exclusion region extended
+only about 0.040 m. A guard therefore lay just outside the excluded flight
+footprint and directly across its approach. The tiny numerical gap was enough
+to defeat the earlier logic. Protect the complete approach gate, not merely
+the tread polygon.
+
+Perform horizontal or swept-volume entrance and exit checks as well as
+vertical headroom checks. In the reference fix, sweeps traversed the region
+just before and after each endpoint at several lateral offsets and at about
+0.50 m and 1.00 m above that endpoint's standing level. A typical start sweep
+ran from roughly 0.35 m before the first riser to 0.15 m beyond it. These
+numbers illustrate the missed region; use an adequate body envelope for the
+actual new model rather than treating a few rays as a universal guarantee.
+
+Test the rail geometry that the delivered code actually emits: horizontal
+bars, vertical posts, sloped flight rails, and turn-landing rails. Do not test
+only raw guard metadata while ignoring generated beams or their transforms.
+If a previous version has a visible blocking rail, the regression check must
+reproduce that obstruction before demonstrating the fix.
+
+
+13. STAIR ENCLOSURES, DEAD POCKETS, AND EXTERIOR DISCHARGE
+
+Use the real enclosure type for each core and floor. Enclosed stair rooms need
+their source walls and floor-level doors. An open lobby stair must not acquire
+an invented full-height stairwell shell. Conversely, a room alongside a stair
+must not be left open into it merely because the stair mesh was generated.
+
+If two entrances are intended to serve one stair, connect them with an actual
+level vestibule or landing before the flight. A divider that runs all the way
+between their doorways can turn one entrance into an inaccessible under-stair
+pocket. Shorten or reshape only the offending divider tip and preserve the
+enclosure farther along the shaft.
+
+If a similarly shaped space is verified storage, preserve its storage access
+instead of automatically joining it to the public stair. Let the evidence
+and explicit user instruction decide which situation exists.
+
+For an exterior discharge, solve the interior landing, door, exterior porch,
+small ground steps, side rails, and grade together. The porch must be level
+and supported, the door must open onto it, and the last step must meet the
+ground. Do not bury the flight in terrain or leave its underside visible as
+an unintended public entrance.
+
+Where the user describes a square concrete porch with three small steps,
+model that specific arrangement rather than a long sunken flight. Use measured
+dimensions if available; otherwise expose the rise and porch size as estimates.
+Continue railings along the sides and down the steps, leaving the walking
+mouth and doorway open.
+
+
+14. DOORS, RESTROOM ENTRANCES, ELEVATORS, AND LOBBY CIRCULATION
+
+Determine the wall, side of the wall, opening width, orientation, threshold,
+and connected spaces for each doorway. Match the actual plan instead of
+placing one generic door at the center of every room. A door on the wrong
+side of a room is a topology error, not a cosmetic difference.
+
+Use source gaps, swing indications, frames, photographs, and neighboring
+space relationships together. Distinguish single swing, double push/pull,
+automatic sliding, fixed glazed panels, elevator openings, service doors,
+and unleafed interior passage frames. Model a leaf and its parked/open state
+coherently with the intended accessible route. A visible open leaf and a
+hidden closed collider must not disagree.
+
+Retain multiple entrances where they are actually present. Do not merge two
+adjacent restroom vestibule openings into one centered door. Do not collapse
+two lobby entrance clusters into one generic central opening. Count both
+openings and door leaves; two clusters can contain more than two openings.
+
+Check restroom entry routes and vestibules carefully. A plan may have two
+adjacent accesses or a bent privacy approach. Preserve the actual layout
+rather than deciding from the displayed word Men or Women alone.
+
+Elevator doors must face the serving corridor. Do not put them on the rear
+shaft wall or face them toward a neighboring room. Confirm the served floors
+and which elevator continues into a penthouse. Retain real shaft/stair
+adjacency; do not invent a strip of empty corridor between an elevator bank
+and a stair directly behind it when the sources show them touching.
+
+Mechanical and HVAC rooms require meaningful service access. An adjacent
+service room may provide that route, but this must be evidence-supported or
+clearly provisional. Do not solve a missing service entrance by routing
+through ascending treads, a shaft, an unrelated private office, or a wall.
+
+Use normal entrance logic in lobbies: clear space in front of doors, access
+to both associated hallways, consistent door heads, supported thresholds,
+and furniture that does not block circulation. Verify the routes to rooms
+on both sides of a lobby rather than checking only the exterior entrance.
+
+Glazing, handles, and frames need to read from the interior and exterior.
+Where the brief requests double-sided glass doors, do not deliver doors that
+disappear from one viewing direction. Where handles are visible on both faces,
+include them appropriately. Match photographs rather than adding decorative
+hardware at random.
+
+
+15. WINDOWS AND THE EXTERIOR ENVELOPE
+
+Derive window placement and elevation from relevant photographs, elevations,
+and plan openings. A plan's façade symbol does not establish that glazing
+starts at floor level. Use a sill or solid panel below the glass when the real
+building has one. Use floor-height glazing only where an entrance, storefront,
+or curtain-wall condition actually calls for it.
+
+Different wings and storeys may use different façade systems. For example,
+a taller block can have high horizontal glazing above solid panels while a
+lower wing has taller windows above brick-colored panels. Do not apply one
+window-height preset indiscriminately to every room.
+
+Model the full façade assembly where evidenced: sill bands, opaque infill,
+horizontal beams, vertical piers or mullions, reveals, glazing, and edge
+returns. Preserve the rhythm of bays and columns. Do not mistake a small
+column marker for a full-height glazed slot.
+
+For a multi-pane window, place mullions at the correct locations. A central
+vertical and horizontal cross creates four panes only if it actually divides
+the visible glazing into the intended proportions. Match the user's stated
+pane pattern and photographs; do not replace it with arbitrary strips.
+
+Cut or omit all opaque geometry occupying each glazing aperture. Inspect from
+inside and outside. A transparent material does not repair an outside wall
+covering a window, nor does a second glass plane repair an incorrectly
+extruded wall. Keep window colliders consistent with the intended fixed glass.
+
+At entrances, distinguish full-width adjacent windows from narrow sidelights.
+Do not erase the narrow balancing strip beside a door or treat it as another
+equal-size window. Preserve left/right relationships using the user's stated
+viewpoint. A description made while facing an entrance from outside must not
+be mirrored by using an interior view without translating directions.
+
+Use the compass and identifiable façade landmarks to associate each photo
+with the correct side. Do not guess orientation from camera perspective alone.
+If the photo is mirrored or its viewpoint is ambiguous, record that issue.
+
+Check outward sightlines or equivalent geometry intersections for glazing.
+Opaque wall fragments, duplicate exterior shells, fascia pieces, and misplaced
+piers must not hide the intended glass. Use a sensible local reveal distance;
+a legitimate courtyard wall farther away is not an error just because it
+lies along the same ray.
+
+Check every affected storey after a façade update. Fixing a window system
+must not overwrite a floor's room data, corrupt its slab, reset its plan
+registration, or distort the top floor. If only façade parameters changed,
+prove that unrelated plan geometry survived.
+
+
+16. TERRAIN, BREEZEWAYS, EXTERIOR PATHS, AND FURNITURE
+
+Treat terrain as a relationship between actual entrance elevations and site
+surfaces. The nominal second floor can have an exterior ground entrance on
+an uphill side. Do not assume that every outdoor door must discharge at the
+lowest floor datum.
+
+Use evidence to identify covered connections, paths between wings, courtyards,
+patios, engineering or service terraces, ramps, concrete aprons, and small
+step flights. Keep their positions tied to the same building registration.
+Do not raise terrain through windows, bury exit steps, or cover a usable
+entrance with a green box.
+
+Exterior and interior landings must meet without cracks, accidental changes
+in elevation, or unexplained offset hallways. A corridor that looks shifted
+relative to its exterior door needs registration or geometry correction, not
+an unrelated floating bridge added over the error.
+
+Model furnishings where supported by the brief or photographs. Distinguish
+mandatory observed items from optional decoration. Preserve requested items
+when repairing building geometry.
+
+Examples of details whose placement matters:
+- A piano faces a specified direction and sits inside its actual lobby bay.
+- Fixed glass in front of that piano remains between the correct entrances.
+- Vending machines face passing foot traffic rather than a wall or stair.
+- Two neighboring round table/bench sets stay in their confirmed corner,
+  instead of being distributed arbitrarily to opposite sides of a passage.
+- Benches, table supports, cabinet depth, door swings, handrails, and people
+  need usable separation.
+
+Furniture collision must resemble the furniture. A flattened decorative
+cylinder must not retain an oversized capsule collider that invisibly blocks
+the whole passage. Use appropriate box or mesh collision representations,
+and do not add solid colliders to purely visual handles, labels, or trim
+unless those collisions have an intentional purpose.
+
+Represent automatic/sliding door types faithfully, but distinguish a static
+architectural representation from functioning door automation. Do not claim
+interactive mechanics that were not implemented. When the brief needs an
+open architectural walkthrough, represent open leaves and parked sliding
+panels consistently with their collision state.
+
+Generic furniture dimensions can be useful estimates. Label them as such,
+keep them editable, and do not infer a brand or an exact manufactured model
+from insufficient photographs.
+
+
+17. ROOFS, SETBACKS, PENTHOUSES, AND THE TOP OF THE BUILDING
+
+Derive roof coverage from the actual occupied footprint below and the
+footprint of the next storey. A lower wing, a bridge, an exposed setback,
+a tower roof, and a penthouse cap can require separate roof surfaces at
+different elevations.
+
+Do not make a roof by placing one enormous slab over the entire building
+outline. It can seal stair openings, intersect an occupied upper storey,
+bridge a real courtyard, or cover an entrance at the wrong height.
+
+Provide coherent structural roof slabs, visible surfaces or membranes,
+parapets, coping, and transitions where the evidence supports them. Treat
+thicknesses and unmeasured parapet heights as editable assumptions. Preserve
+intentional roof exits and service access. Do not turn a roof diagram's
+shading or boundary lines into full-height room walls.
+
+A small top-floor or mechanical diagram is not permission to copy the whole
+tower footprint onto that level. Generate its actual smaller rooms, shaft
+continuations, service platforms, and adjacent roof terraces.
+
+Check that:
+- Every exposed occupied area that needs a roof is covered.
+- Roof solids do not overlap occupied space on the next floor.
+- Roofs meet the wall thicknesses and do not leave random side holes.
+- Parapets protect actual exposed edges and do not run across abutments,
+  intended routes, or stair/door openings.
+- Stairs stop at their evidenced top landing and do not continue through
+  the roof or disappear below an unreachable penthouse door.
+- Any roof-access door opens onto a supported, traversable surface.
+
+When a roof detail is unknown, choose a restrained, physically coherent
+placeholder and identify the assumption. Do not fabricate intricate plant
+layouts or structural systems and present them as facts about the building.
+
+
+PART III. UNITY GENERATOR AND USER WORKFLOW
+==========================================
+
+18. DELIVER A COMPLETE, REUSABLE GENERATOR
+
+The preferred workflow is a complete C# editor generator that the user can
+save into the Unity project's Assets/Editor directory, open from a Tools
+menu, and use to create the whole requested building. The user should not
+have to manually position or scale every floor to make it line up.
+
+When file-generation tools are available, deliver a downloadable complete
+file. Do not repeatedly paste an enormous code listing into the conversation.
+Do not deliver only a patch fragment, an unfinished starter class, or a file
+containing placeholders for the very geometry the user asked you to build.
+
+Use a clear class name, matching file name where appropriate, visible version,
+and menu path. Default to no unexpected third-party packages. If a dependency
+is truly necessary, identify it precisely and provide installation steps;
+do not assume it is installed.
+
+Keep the plan data, geometry construction, validation, inspection controls,
+and parameter handling logically separated. A single delivered script can
+still use a clear internal data model. Derive validation records from a
+meaningful inventory, not from an arbitrary expected object count alone.
+
+Prefer editable Unity objects, sensible materials, properly persisted meshes,
+and collision geometry appropriate to the building. Support the known render
+pipeline with suitable shaders and fonts. Do not leave the building pink,
+invisible, dependent on unavailable fonts, or correct only in a transient
+editor state.
+
+For a self-contained delivery, embed or otherwise bundle the complete
+verified derived plan data and required references. If using compression or
+large encoded payloads, verify their integrity, schema, round trip, and exact
+floor inventory before delivery. A long encoded string is not evidence that
+all floors were actually included.
+
+Do not add unrelated runtime systems to make the building appear functional.
+Navigability here is a property of the geometry, thresholds, doors, stairs,
+and collisions. It can be tested without coupling the building generator to
+unrelated scene behavior.
+
+
+19. HIERARCHY, OWNERSHIP, AND INSPECTION
+
+Create a predictable hierarchy with one building root and clear groups for:
+- Each actual floor.
+- Physical slabs and visible surface finishes.
+- Traced walls and opening heads.
+- Exterior façade/window components and special entrance glazing.
+- Door assemblies and room labels.
+- Stair connections, owned by a clearly documented departure-floor scheme
+  or another equally consistent ownership rule.
+- Roof groups with their own elevations and visibility controls.
+- Exterior site surfaces, paths, porches, and furnishings.
+- Registered source-plan overlays for comparison.
+
+For a departure-floor scheme, each inter-floor stair connection is generated
+once. It must not be duplicated by both storeys. A floor-only inspection
+should include both stairs departing that floor and stairs arriving from the
+floor below, so missing stair visibility is not confused with missing geometry.
+
+Name objects meaningfully. A user debugging a blocked entrance should be able
+to identify the floor, stair core, flight, landing, wall, or guard responsible.
+Avoid hundreds of indistinguishable Cube objects and anonymous regenerated
+pieces whose ownership cannot be traced.
+
+Keep the source overlay registered to the exact same coordinates and
+transform as the model. If registration is piecewise, the reference image's
+mesh/UV arrangement needs to reflect it too. An unregistered poster over the
+model is not a reliable comparison tool. Overlays should be optional and have
+no unintended physical collider.
+
+Treat generated ownership carefully during updates. Replace only the
+authorized generated building and its generated assets. Preserve unrelated
+scene cameras, lighting, user objects, and project assets. Preserve the
+building's existing placement when rebuilding it in an established scene.
+
+
+20. PRACTICAL FLOOR AND ROOF CONTROLS
+
+Provide useful controls for each floor and for the building as a whole:
+- Show all floors and inspect one floor at a time.
+- Activate/deactivate a floor with clear collision implications.
+- Hide/show renderers separately from activation when requested.
+- Show/hide the registered plan overlay.
+- Frame a floor in the Scene view, including a top-down option.
+- Remove/despawn a generated floor when requested, with Undo or a clear
+  regeneration path.
+- Control stair connections, roofs, room labels, site surfaces, and optional
+  furnishings without hunting through an enormous hierarchy.
+
+Distinguish these behaviors explicitly:
+- Renderer visibility hides geometry but can leave active colliders.
+- GameObject activation also affects its active geometry and colliders.
+- Despawning actually removes generated objects and must be undoable or
+  restorable by regeneration.
+
+Do not promise one behavior while implementing another. In floor-only views,
+handle incoming and outgoing stairs and applicable roof levels deliberately.
+Do not automatically hide the very arrival flight needed to inspect that
+floor, and do not show a roof that obscures the intended inspection.
+
+Keep labels readable. Avoid stacked labels from every visible storey making
+the plan illegible. The reference tool normally emphasized labels on the
+highest shown floor, with registered-reference visibility taken into account.
+The exact policy can be adapted, but the result must be convenient to inspect.
+
+After despawning, handle associated connections consistently. For example,
+the reference tool removed a floor and its departing stair group in one Undo
+operation. Do not silently delete an unrelated remaining floor to solve a
+dangling-connection problem. Explain the ownership rule and restoration path.
+
+
+21. A GENUINELY RESIZABLE GENERATOR WINDOW
+
+The generator must resize horizontally as well as vertically. The original
+user specifically rejected a window whose height changed while its fixed-width
+controls stayed impractical.
+
+Use the available content width to size and arrange controls. At narrow
+widths, reflow floor presets and actions into more rows, stack fields and
+labels sensibly, wrap explanatory text, and preserve usable hit areas. At
+wider widths, use the space instead of leaving controls cramped in one narrow
+column.
+
+Provide a useful minimum window size, vertical scrolling for long content,
+collapsible settings sections, and accessible build/status actions. The
+reference tool used a minimum floating size around 320 by 240 pixels and
+reflowed controls for much wider or narrower docking arrangements. These are
+examples, not a substitute for testing the actual new layout.
+
+Avoid cropped buttons, overlapping controls, tiny unreadable labels, enormous
+empty panels, and mandatory horizontal scrolling for ordinary actions.
+Make floor and roof cards respond to width. Restore any changed editor label
+width or GUI state after drawing your controls.
+
+Keep important actions and errors easy to find. Provide the full last build
+error in a readable area and a copy-error action. Show progress stages and the
+current generator version. Do not clear or hide a meaningful error as soon
+as the next GUI repaint occurs.
+
+A window-layout update must not alter building geometry, encoded plans,
+registration, door positions, or feature inventories. Prove that separation
+when the task is only to improve the UI.
+
+
+22. ROBUST EDITOR LIFECYCLE, DATA LOADING, AND REGENERATION
+
+Treat generation as an editor operation with explicit lifecycle boundaries.
+Do not call edit-only scene APIs during Play mode. Disable or safely defer
+generation and destructive operations while entering, running, or exiting
+Play mode. If inspection visibility controls are allowed during Play, do not
+use an edit-only MarkSceneDirty call for those runtime changes.
+
+Do not run expensive plan decoding, asset importing, texture reimporting,
+mesh generation, or scene replacement directly inside an unstable GUI layout
+pass. Queue build/despawn operations outside OnGUI using a supported editor
+scheduling mechanism. Keep GUI layout scopes balanced.
+
+Respect Unity's GUI-exit mechanism. Do not swallow its control-flow exception
+and continue issuing GUILayout calls afterward. Ordinary errors should still
+be caught, reported with useful stage information, and cleaned up properly.
+
+Prepare/import required reference textures and materials at a deliberate
+stage, rather than unexpectedly refreshing assets partway through a drawing
+pass or halfway through construction of the scene hierarchy.
+
+Validate the data contract on every fresh build:
+- The requested number of floors is present and correctly numbered.
+- Every floor has valid footprint, wall, opening, label, finish, stair, and
+  reference records, including intentionally empty arrays.
+- Roof and penthouse records are present where requested.
+- Optional objects are normalized; non-null does not necessarily mean their
+  internal arrays were populated by serialization.
+- The schema and generator agree.
+- The data actually decoded is the latest data, not an old window cache.
+
+Do not rely on a large mutable inline plan object surviving editor reloads
+correctly. Keep rebuildable derived caches transient, reinitialize them
+deliberately, and reject an incomplete cached object rather than trusting it
+because it is non-null. A closed/reopened window should not be the normal
+way to recover missing floors.
+
+If Floor 6 or a roof control is disabled, distinguish a missing generated
+scene object from missing plan data, a stale cache, an invalid schema, or a
+failed build. Report the cause. Do not show a success message merely because
+the first few floors were generated.
+
+Use a two-phase, recoverable replacement:
+1) Validate and prepare the source-derived data.
+2) Build a temporary complete replacement with fresh meshes/assets.
+3) Run the required generated-geometry checks.
+4) Commit the replacement only if it passes.
+5) Keep the previous building and roll back partial objects/assets on failure.
+
+Use appropriate Undo grouping and clear ownership. Do not delete the previous
+working building first and leave the user with an empty scene after an error.
+Do not disturb unrelated scene objects or assets.
+
+Avoid stale native mesh buffers. Updating a persisted mesh in place while
+renderers/colliders still reference it can leave old faces or indices visible.
+Use a coherent fresh-mesh/persistence strategy and verify that renderers and
+colliders reference the intended mesh after regeneration.
+
+Check that generated asset-folder constants and actual folder-creation calls
+agree. Changing a path from one version folder to another without updating
+its creation logic is a real build failure. Keep required meshes/materials
+persistent so saving and reopening the Unity scene retains the building.
+
+Keep a single authoritative generator class. Warn clearly against installing
+several downloaded copies with the same class. Preserve asset references and
+existing .meta files during ordinary replacement where appropriate. Give
+specific repair instructions if duplicate scripts or an invalid file/class
+relationship prevents compilation.
+
+Verify the actual supported Unity APIs, signatures, enum members, shader names,
+and font resources when writing version-sensitive code. Do not invent API
+members from memory or make a test fixture accept a nonexistent symbol.
+Address meaningful compiler warnings when practical without replacing working
+logic with an unsupported newer overload.
+
+
+PART IV. VALIDATION, CORRECTION DISCIPLINE, AND DELIVERY
+======================================================
+
+23. VALIDATION MUST FOLLOW THE DELIVERED ARTIFACT
+
+Validate the final file and the final emitted geometry, not an earlier local
+copy, a pre-registration draft, a different JSON payload, or an idealized
+model that omits the objects generated by the code.
+
+Use several complementary forms of verification:
+
+A. Source and data integrity
+- Correct floor/roof inventory, schema, optional arrays, identifiers, and
+  nonempty required records.
+- Complete encoded-data round trip if data is bundled in the script.
+- Correct indices, valid polygons, holes, triangulation, cap/side winding,
+  finite values, and appropriate mesh bounds.
+- Float-precision checks where narrow source features or long coordinates
+  can cause cracks, inverted solids, or lost faces.
+- True wall solids, not just flat surfaces or empty meshes.
+
+B. Plan and registration comparison
+- Per-floor top views compared with registered source overlays.
+- Enlarged views of every stair/elevator core, lobby, paired entrance,
+  service access, exterior door group, and difficult corner.
+- Shared exterior planes and vertical anchors checked across all floors.
+- Real setbacks and smaller roof/penthouse footprints preserved.
+- Source symbols interpreted in context rather than mechanically extruded.
+
+C. Circulation and three-dimensional clearance
+- Doorways join their intended spaces, face the correct way, and have
+  supported thresholds and adequate openings for the chosen model envelope.
+- Every intended room/service area has an evidenced route through the
+  appropriate interior or exterior circulation network.
+- All stair flights, turn landings, entry aprons, arrival aprons, and floor
+  transitions are supported and traversable.
+- Headroom includes all relevant solids at all relevant levels.
+- Entrance and exit sweeps include rails/posts before and beyond the treads.
+- A real turning path fits the U or L landing.
+- Exterior steps, porch, door, and ground are continuous.
+
+D. Exterior and roof checks
+- Glazing is visible and unobstructed through the intended aperture.
+- Correct sills, pane divisions, façade rhythm, and direction.
+- No random opaque skin over windows or missing side-wall sections.
+- Roof coverage and parapets match exposed footprints without sealing an
+  occupied level or intended stair/roof route.
+- Ground and furniture do not block entrances or paths.
+
+E. Unity/tool behavior
+- Relevant C# compilation where a real compiler and appropriate references
+  are available.
+- Actual editor generation and repeat regeneration when Unity is available.
+- No errors caused by GUI scope imbalance, imports, stale caches, invalid
+  scene-dirty calls, missing directories, or incomplete data.
+- Useful behavior after saving/reopening the scene and closing/reopening
+  the generator.
+- Active/render/reference/despawn controls and Undo work as described.
+- Narrow, wide, floating, and docked window layouts remain usable.
+
+F. Visual review
+- Inspect full-building exterior views from all principal sides.
+- Inspect each floor from above and at walking height.
+- Look along corridors and through doors, especially around service cores.
+- Ascend and descend the difficult stairs visually or with an appropriate
+  physical probe, including the turn and both endpoint approaches.
+- Inspect the underside of stairs from neighboring entrances.
+- Inspect windows from inside and outside, roof edges, and the raised-ground
+  entrances.
+
+Counts are preservation checks, not complete geometric proof. A model with
+the expected number of doors can still put every door on the wrong wall.
+A route graph can be connected while the collider blocks it. A floor can
+have a valid mesh while its room arrangement is wrong.
+
+Use independent tests that can detect the actual failure. For a correction,
+reproduce the old defect before accepting the new result. A test that passes
+both the visibly broken and corrected geometry has not demonstrated that
+the defect was fixed.
+
+Do not test only vertical rays and declare all stair access clear. Do not
+test only centers of treads and ignore the guard just before the first one.
+Do not test only upper-floor slabs and ignore same-floor lintels and other
+flights. Do not ignore support beneath an otherwise clear walking sample.
+
+If a simplified pathfinder approximates under-stair walls as full-height or
+omits exterior links, interpret its results correctly. A before/after result
+showing no lost routes does not prove that every room is reachable. Refine
+the model or state the test's actual coverage.
+
+If Unity or its compiler is unavailable, perform the useful independent
+geometry, source, payload, and visual checks you can perform, then state
+precisely that native Unity compilation or editor execution was not run.
+Syntax parsing is not compilation. A fixture is not the Unity engine.
+Do not claim native success from either one.
+
+Collider-based checks must not silently report success when colliders were
+disabled. Validate an equivalent representation where practical or explicitly
+identify the physical checks that were not run. Keep critical safeguards
+enabled by default in the delivered tool.
+
+
+24. FIX CAUSES, PRESERVE FEATURES, AND PREVENT REGRESSIONS
+
+Treat the user's screenshots as evidence of specific errors and as clues to
+systematic problems. If one stair has a bad half-landing, inspect the repeated
+generator logic and all other applicable cores. If one façade pane is hidden
+behind an outside wall, inspect the rest of that façade system and floor data.
+
+Before editing, retain the working baseline and inventory the features to
+preserve. Classify which records and methods actually need to change. After
+editing, compare unrelated geometry and feature inventories directly.
+
+Preserve all legitimate rooms, labels, walls, doors, windows, stairs, exterior
+entrances, roof areas, furniture, and useful tool controls. Preserve intended
+enclosures and real design oddities. Remove only duplicates, incorrect
+intrusions, accidental barriers, or other features shown to be erroneous.
+
+Do not solve an under-stair dead pocket by deleting the entire room block.
+Do not solve a low stair ceiling by removing the whole upper floor.
+Do not solve a crossbar at one stair entrance by deleting every safety rail.
+Do not solve exterior misregistration by separating interior and exterior
+scales so they match only from a particular view.
+
+Whenever changing a shared function or data transformation, check all floors
+and wings that use it. Revisit the top floor, roof, and special-case stair
+connections after changes to common geometry logic.
+
+Keep a concise revision log recording the issue, evidence, chosen correction,
+affected records, preservation checks, and test coverage. Update the generator
+version visibly so the user can identify the file actually loaded in Unity.
+
+Do not treat an earlier "finished" version as ground truth. The reference
+project repeatedly exposed defects after previous checks had passed. The
+lesson is to improve the checks and source interpretation, not to defend
+the old artifact or repeat the same test with a more confident message.
+
+
+25. DELIVERABLES AND INSTALLATION INSTRUCTIONS
+
+Deliver the complete requested artifact, preferably a downloadable generator
+file with all required derived data bundled. Include a short, practical
+description of what is built, where assumptions remain, and what was tested.
+Do not fill the final answer with the enormous code listing when a file can
+be provided.
+
+Give installation steps specific to the actual delivery:
+1) Stop Unity Play mode before replacing or generating editor assets.
+2) Back up or preserve the relevant existing project as appropriate.
+3) Replace the existing generator in Assets/Editor; keep one authoritative
+   class/script copy and preserve needed .meta references.
+4) Wait for compilation and resolve any actual compiler error.
+5) Open the stated Tools menu entry and confirm the expected version.
+6) Choose the intended settings, with collision validation enabled when used.
+7) Run Generate / Replace Complete Building, or the exact action implemented.
+8) Frame/focus the result, inspect the relevant floors, and save the scene.
+
+Explain that replacing generator code does not necessarily rebuild existing
+scene geometry. The user must run the generator's rebuild action to see its
+mesh changes. Tell the user how to inspect floors, show/hide roofs or plans,
+and restore a despawned floor using Undo or regeneration.
+
+Do not require manual per-floor alignment. If ordinary installation requires
+dragging floors until they look right, the generator has not solved the
+registration requirement.
+
+Report exact error messages when diagnosing a failure. Distinguish compiler
+errors, editor exceptions, incomplete source data, disabled controls caused
+by absent objects, and geometric validation failures. Do not respond to a
+concrete screenshot with another untested guess or unrelated replacement.
+
+When reliable automatic access is unavailable, ask for the smallest useful
+debugging evidence, such as the full Console error and relevant object or
+generator settings. Do not make the user restate the entire project.
+
+
+PART V. BUILDING 9 REFERENCE CASE AND COMPLETE CORRECTION HISTORY
+================================================================
+
+26. HOW TO USE THIS CASE STUDY
+
+This part preserves the building-specific context and corrections behind the
+reusable requirements. Apply it literally ONLY when the active building is
+Cal Poly Pomona Building 9. For another building, transfer the quality
+standards and failure-prevention lessons, then derive its actual features
+from its own plans, photos, measurements, and user observations.
+
+The reference is Cal Poly Pomona's Building 9, the Engineering Building. The
+project began with Floor 1, expanded to Floor 2, then Floors 3-5, then Floor 6
+and roofs. The final reference scope is six floor records, including the
+small top penthouse/service level, plus roofs and relevant exterior site.
+An earlier instruction to leave Floor 6 for later was explicitly superseded
+by the later request to add it.
+
+The latest delivered building generator in this record is v6.9.1. It is a
+delivered candidate with source/geometry checks, not a claim that a native
+Unity walkthrough verified every detail. An unanswered delivery message is
+not the user's confirmation that everything in the building is correct.
+
+Source names used in the project:
+- b9-1.pdf: Floor 1.
+- b9-2.pdf: Floor 2.
+- b9-3-4.pdf: separate Floor 3 and Floor 4 information.
+- b9-5-6.pdf: Floor 5 and the smaller Floor 6/penthouse information.
+- Additional floor-map images, annotated Unity screenshots, and exterior
+  photographs supplied orientation and correction evidence.
+
+Some early images initially had unavailable local paths. Later usable copies
+and PDFs were supplied. Resolve and inspect actual available sources rather
+than inferring that they remain missing or claiming to have traced an unread
+image. This text does not embed those source images.
+
+Current implementation names, useful if continuing this exact project:
+- File/class: EngineeringFloor1Generator.cs / EngineeringFloor1Generator.
+- Location: Assets/Editor/EngineeringFloor1Generator.cs.
+- Menu: Tools > Engineering Building > Building Generator.
+- Generated root: Engineering Building.
+- Floors: Floor 1 through Floor 6.
+- Stair ownership: Stair connections / From Floor N.
+- Additional groups: Roofs, Site, per-floor walls/slabs/windows/labels, and
+  registered Reference overlay groups.
+- Generated assets: Assets/EngineeringBuildingGenerated; the latest candidate
+  used a V69 parent with fresh per-build mesh subfolders.
+
+Use equally clear names for a new building instead of mechanically copying
+these project names.
+
+
+27. FORM, ORIENTATION, GRADE, AND REGISTRATION
+
+The building has a lower two-storey wing and a taller block, with circulation
+between the wings. Different views/descriptions used south wing, west wing,
+and taller/north block. Resolve aliases against the compass and the actual
+plan; page-left is not automatically globally west or south.
+
+The supplied floor-map compass points north toward the right of the page.
+The implemented coordinate system used positive world X approximately north
+and positive world Z approximately west. This is case-specific, not a
+required axis convention for another project.
+
+The north ground is higher. A real exterior path reaches the north-side
+main lobby on Floor 2, giving that floor a ground-level entrance on the
+uphill side. It must not become a floating door, a first-floor entrance
+relabeled Floor 2, or an opening buried in terrain.
+
+The user repeatedly found stairs/interiors aligned while exterior wall
+planes did not. Storeys looked like Jenga blocks. Align both shared interior
+anchors AND exterior planes while preserving actual setbacks, lower-wing
+roofs, and the smaller top-floor footprint. Do not use independent floor
+Transform scales or a cosmetic exterior shell divorced from the rooms.
+
+The user also reported a shifted first-floor lower/south-wing hallway, an
+unnatural gap and misalignment near the Room 205 stair, a random side hole
+in the taller section, and an unexplained southernmost gap. Inspect each as
+a specific seam/registration issue. Do not preserve an accidental crack as
+an architectural feature or fill a real door while repairing it.
+
+
+28. STAIR IDENTITIES, FLOOR CONNECTIONS, AND EXCEPTIONS
+
+The user's general description was that ordinary stairs ascend approximately
+half a floor, reach a LEVEL landing, turn 180 degrees to the RIGHT, and
+ascend the remainder. The important requirements are the level turn,
+coherent flights, correct route direction, meaningful floor exits, and
+unobstructed head/body clearance.
+
+The latest model uses S1 through S5 as project stair identifiers. Map them
+to the actual drawings rather than inventing locations from the numbers.
+
+S1:
+- A lower-wing core connecting Floor 1 to Floor 2 with a U-shaped route.
+- It stops at Floor 2 rather than continuing through absent wing storeys.
+- The user wanted the lower-wing stair terminating at Floor 2 to discharge
+  sensibly to the WEST with the ordinary double-door arrangement, instead
+  of an odd exit layout.
+- The current candidate explicitly models west-hall glazed double doors on
+  Floors 1 and 2, and a separate Floor 1 stair-side service-room door
+  associated with Room 128.
+- Preserve legitimate service-room separation and distinguish that separate
+  door from the public stair route.
+
+S2:
+- The lower-wing stair near Room 114 on Floor 1 and 244A/244B/264 on Floor 2.
+- A U connection from Floor 1 to Floor 2, terminating there.
+- The exit next to 244A should work like the paired exit arrangement at
+  the stair beside 226: two useful floor-level openings and sensible
+  enclosure/arrival space, not an open or blocked shaft edge.
+- Preserve a supported shared Floor 2 arrival apron and both hall openings.
+- The user requested a floor where this stair appeared improperly open.
+  Preserve the level apron without capping required flight/headroom space.
+- Later screenshots showed one lower entrance serving the stair and another
+  leading only underneath it. The user explicitly requested that the two
+  entrances be CONNECTED. Shorten only the projecting divider tip so they
+  share a level vestibule, retaining the divider farther into the shaft.
+- A diagonal break in the Floor 1 stair symbol had shortened the lower run
+  incorrectly. The current candidate extends its foot plane to match the
+  return leg within the same shaft, making the U geometry more consistent.
+- The label 114 and neighboring room data must survive this correction.
+- The turn landing needs clear head space. A slab underside at 3.98 m
+  above a 2.10 m turn left only 1.88 m and was an actual model defect.
+
+S3, beside Room 205 and the inter-wing space:
+- Its Floor 2 symbol describes a connection down toward Floor 1, not an
+  extra outgoing Floor 2-to-3 stair.
+- The main connection is a SINGLE FLIGHT, specifically not a U return.
+- At the lower end, the door is to the left of the descending route in
+  the user's description; it leads to a concrete patio/porch and three
+  small steps to lower ground.
+- Later instructions specify a square porch, three small steps, side
+  railings on the porch, and rails continuing down the steps.
+- Do not bury the exterior stair in terrain.
+- Restore the wall separating the adjacent room that had been left wide
+  open to the stair. Keep that room and its intended access.
+- Correct the outside wall and shaft alignment between Floors 1 and 2,
+  including the old diagonal notch/gap and shaved wall remnant.
+- Retain the Floor 2 landing doorway and genuine side/edge guard.
+- Do not automatically transfer the S1 west double-door request onto every
+  S3 opening. The current candidate represents S3's lower side exit as a
+  single swing opening at a raised threshold. Confirm a leaf-count change
+  from the precise photo/location rather than conflating separate exits.
+
+S4, at the elevator/restroom core near Room 226 on Floor 2:
+- A normal U core with a level turn.
+- It connects up through the tower, including Floor 5 to Floor 6, and
+  terminates at the penthouse level.
+- Preserve its close adjacency to the elevator bank and the two actual
+  floor-level openings. Do not invent a buffer corridor behind the lifts.
+- Preserve the adjacent restroom entrance layout rather than replacing
+  it with one generic centered doorway.
+
+S5, at the north lobby:
+- The user clarified that the distinctive OPEN L begins ON FLOOR 2 and
+  leads to Floor 3. It is not merely an arriving lower-floor stair shown
+  on Floor 2.
+- Its first ascent faces SOUTH, followed by a RIGHT turn.
+- At Floor 3 it becomes an ordinary U arrangement for subsequent connections.
+  Do not repeat the special Floor 2 L on every upper storey.
+- Do not put a full enclosing stairwell shell around the Floor 2 lobby L.
+  Preserve legitimate surrounding service/room walls.
+- The current candidate has U connections from Floor 3 to 4 and from 4
+  to 5; it does not add an S5 connection from Floor 5 to Floor 6.
+- KNOWN UNRESOLVED INTERPRETATION: the user said the other ordinary stairs
+  use U paths, but the latest script still represents Floor 1 S5 using two
+  perpendicular drawn flights and explicitly flags that physical route
+  for confirmation. Resolve this with the actual source/site evidence.
+  Do not present the script's Floor 1 L as a user-confirmed physical fact.
+
+Enclosure rule and its exception:
+- The user described ordinary staircase rooms as walled off with two
+  doorways onto the actual floor.
+- The later specific exception is the OPEN Floor 2 north-lobby L, which
+  does not need a shell.
+- Neither requirement permits exposing unrelated rooms directly to stairs.
+
+
+29. NORTH LOBBY ENTRANCES, HALL CONNECTIONS, PIANO, AND GLASS
+
+The Floor 2 north lobby needs doors/routes to BOTH hallway sides, including
+access toward 219, 225, and their respective corridors. Do not leave only
+one useful hall connection.
+
+The user's shorthand of two lobby doors was refined into two entrance
+CLUSTERS containing several distinct openings. In the stated orientation
+of facing NORTH:
+- The left cluster has automatic sliding doors.
+- Adjacent to those is a separate push/pull manual opening.
+- The right cluster has double push/pull doors.
+- The piano is between the flanking entrance areas and faces NORTH.
+
+Do not collapse this into two single leaves or one generic central door.
+Preserve the separate openings and both interior hallway connections.
+
+The piano sits in a small projecting lobby bay. The bulge is associated
+with that piano area, not a large invented room or an arbitrary offset of
+the entire north wall.
+
+The user later clarified that GLASS belongs in front of the piano, roughly
+spanning the bay between the flanking door areas. The current candidate
+uses fixed north-facing glass and short glazed returns in place of an
+opaque bay front. Do not leave an outside wall hiding that glass.
+
+The bay's exact real-world projection and precise glazing elevations are
+not established by this text or by plan linework alone. Confirm or clearly
+estimate them from the photos/measurements rather than certifying current
+model dimensions as surveyed facts.
+
+
+30. RESTROOMS, LIFTS, ROOM 205, AND MECHANICAL ACCESS
+
+Preserve these explicit corrections:
+- Floor 2 men's restroom door placement was wrong; use the actual source
+  openings and correct side.
+- The restroom/vestibule at 226 has TWO entrances immediately next to one
+  another. Do not merge them into one door.
+- Floor 2 elevator doors faced the wrong way. They need the correct
+  serving-corridor orientation, including the side associated with 203.
+- There is no intended empty strip between that elevator bank and the
+  stair directly behind it.
+- Room 205's door was on the wrong side. Correct it to the plan's actual
+  side; this English history does not establish a compass side to invent
+  without rereading the plan.
+- The stair near 205 belongs to the special lower connection described
+  above, not an additional outgoing Floor 2 flight.
+- The HVAC room next to 210 needs a usable service entrance/exit.
+
+The current candidate resolves HVAC access via neighboring service Room
+212, which has a hall approach. This is an implementation choice for an
+unclear source opening, NOT firsthand confirmation from the user that the
+real HVAC door is exactly there. Keep it provisional until verified if
+continuing the physical reconstruction.
+
+The ordinary reference floors have three modeled elevators. The small
+Floor 6 plan contains Elevator 3 only. Do not copy all three lift cabins
+and doors onto the penthouse.
+
+
+31. LOWER-WING ENTRIES, SPECIAL GLAZING, TABLES, AND VENDING
+
+Correct the displaced first-floor lower/south-wing hallway relative to its
+actual entrances. Do not compensate for a misplaced hall with an unrelated
+floating passage or extra door.
+
+Provide the appropriate glazed double-door entrance arrangements associated
+with BOTH wings/breezeway. The user also specifically requested south-wing
+glass doors. Several corrections concerned different physical entrances;
+do not combine them all into one doorway.
+
+The user first described two round table/bench sets as being on either
+side, then corrected their placement: they are next to one another in
+the referenced CORNER. The later placement controls. The current model
+maps the default two adjacent sets to the recessed breezeway corner
+beside the area identified as Room 167. It exposes optional extra placements,
+but FOUR sets are not a requirement or a confirmed physical inventory.
+
+Represent the observed round table-like bench furniture with appropriate
+tables, curved bench sections, and supports. Keep the furniture out of
+entrances and passing lanes. Avoid invisible oversized primitive colliders.
+
+For the particular ground-floor exterior glazing group later described,
+the user's OUTSIDE-FACING viewpoint establishes:
+1) Three full glazed windows to the LEFT of the door.
+2) The door assembly.
+3) A NARROW glass strip immediately to its RIGHT, balancing the group.
+4) Another full glazed window farther RIGHT.
+5) Full windows approximately the same height as the glazed door.
+6) A central vertical and horizontal cross in each full window, making
+   four equal smaller panes.
+
+This is FOUR full crossed windows plus a narrow sidelight. Do not turn the
+strip into a fifth equal window or omit the far-right window. The current
+generator treats this as a particular first-floor east/tower entry group.
+Verify the exact façade with the source image and compass; do not impose
+it on every south-wing door.
+
+Add vending machines between the wings beside the 205 stair EXIT, facing
+passing pedestrian traffic. The current candidate models TWO generic
+machines, snacks and drinks, on supported concrete paving. Keep passing
+clearance and avoid the porch rails and door swings. Exact cabinet sizes,
+products, and branding are not user-verified construction details.
+
+
+32. WINDOWS, EXTERIOR ALIGNMENT, AND MODEL HEIGHT ASSUMPTIONS
+
+The user provided real-building photos after noticing that some room
+windows started at the floor. Correct ordinary windows to their real
+sills/solid lower panels and distinguish the lower wing from the tower.
+Use the photos' compass/view context to assign the correct side.
+
+The user then found glass behind an outside wall. Correct the complete
+aperture through the envelope; a glass-material adjustment is insufficient.
+Floor 5 was also damaged during this sequence. Verify that a façade fix
+does not change its room layout, data, slab, labels, registration, or stairs.
+
+The Jenga-like stack was another distinct issue: match outside planes AND
+inside cores, preserving genuine setbacks rather than merely scaling the
+outside to hide misregistered interiors.
+
+Current reference MODEL SETTINGS, not surveyed dimensions:
+- Floor-to-floor spacing: 4.20 m.
+- Floor slab depth: 0.22 m.
+- Ordinary opening/lintel head setting: 2.15 m.
+- Tower sill above the local floor: 2.35 m; tower glazing height: 1.10 m.
+- Lower-wing sill: 0.95 m; lower-wing glazing height: 2.05 m.
+- Roof slab depth: 0.22 m.
+- Main parapet parameter: 0.60 m, scaled for the different roof groups.
+- Raised 603B service-platform parameter: 0.60 m.
+- S3 porch rise/drop: 0.48 m across three small steps.
+- S3 exterior stair width parameter: 1.80 m; side rail height: 1.00 m.
+
+Do not copy these as required defaults for another building. For Building
+9, revise them if reliable sections, elevations, or measurements become
+available. Retain assumptions separately from plan-traced horizontal data.
+
+
+33. FLOOR 6, ROOFS, AND TOP-LEVEL GENERATION
+
+The final scope includes Floor 6 and coherent roofs. The smaller Floor 6
+diagram is separate source information, not a duplicate of the whole tower
+or Floor 5. Its current room labels are 601, 603, 603A, 603B, and 604, with
+Elevator 3 only.
+
+Retain Stair 4 from Floor 5 into the penthouse and terminate it there.
+Provide the relevant room openings, roof exit, and service-platform steps.
+The current candidate has two short 603B service-step flights whose rise
+remains configurable and estimated.
+
+The roof groups distinguish:
+- Lower setback roofs above Floor 1.
+- The two-storey wing and bridge roof above Floor 2.
+- Tower roof beside the penthouse above Floor 5.
+- Penthouse cap above Floor 6.
+
+Do not put a full-width sixth storey on the lower wing. Do not seal the
+penthouse access with a neighboring roof slab. Cover actual exposed volumes
+without deleting intended openings or crossing occupied upper-floor rooms.
+
+The user encountered failures with missing/greyed Floor 6 and roof controls.
+Check complete decoded records, matching schema, optional arrays, editor
+caches, scene-object presence, and build errors. Refreshing project files
+should not be the normal cure for missing building data.
+
+
+34. USER EXPERIENCE AND INSTALLATION REQUIREMENTS
+
+The user wanted generated building code, then clear step-by-step instructions
+for installing it in Unity. They explicitly asked the assistant to stop
+pasting the huge file into the chat. Deliver a complete DOWNLOADABLE file
+and concise instructions for its folder, menu, generation action, inspection,
+and scene save.
+
+The user requested independent floor visibility/rendering and despawning.
+The current tool offers Active, Render, Reference, Top, Focus, and Despawn,
+with floor presets, stairs/site controls, roof controls, and room labels.
+Preserve these when changing building geometry.
+
+The user also requested a generator window whose WIDTH resizes usefully,
+not merely its height. Buttons, fields, and cards should adapt/reflow and
+remain practical. Responsive UI is part of the finished building tool.
+
+An earlier building-editor Console report showed edit-only scene-dirty
+operations during Play and invalid GUI layout state. Safe editor lifecycle,
+deferred heavy operations, balanced GUI handling, and useful diagnostics
+are therefore part of the building-making requirements.
+
+
+35. CHRONOLOGICAL USER-CORRECTION LEDGER
+
+Later clarifications supersede earlier ambiguous shorthand. Preserve each
+distinct physical requirement rather than merging nearby requests.
+
+01. Recreate the real building from the Floor 1 plan with usable Unity code.
+02. Give step-by-step installation instructions; stop pasting the large file.
+03. Add aligned Floor 2, including uphill north terrain/path and its real
+    second-floor ground entrance.
+04. Include the north lobby stair and routes to BOTH hall sides toward
+    rooms such as 219 and 225.
+05. Add separating floor slabs while keeping the real stair openings.
+06. Add per-floor rendering/visibility and despawn controls.
+07. Correct overlapping walls, distorted layouts, and remaining small
+    Floor 1 overlaps by carefully rereading the blueprints.
+08. Use ordinary U stairs with level half-height turn landings.
+09. Start the special north L on Floor 2 toward Floor 3; use ordinary U
+    arrangements above it. Preserve ordinary enclosures/two floor doors,
+    with the later open-lobby exception.
+10. Use Building 9's identity, drawings, and photographs for context instead
+    of substituting a generic plausible layout.
+11. Correct Floor 2 men's-restroom doors.
+12. Correct Floor 2 elevator-door orientation.
+13. Do not enclose the Floor 2 north lobby L in a full shell.
+14. Put Room 205's door on the actual source-plan side.
+15. Do not treat the stair near 205 as departing Floor 2 to an extra level.
+16. Retain north-lobby entrance clusters: left sliding plus adjacent manual,
+    and right double push/pull, using the stated north-facing orientation.
+17. Add the north-facing piano between those areas in its small projecting bay.
+18. Model the special 205 stair's single lower flight, side exit to the left
+    of descent, porch/patio, and three ground steps; no generic U return.
+19. Remove the invented space between the Floor 2 elevator bank and the
+    stair directly behind it.
+20. Retain TWO immediately adjacent restroom/vestibule entries at 226.
+21. Add Floors 3, 4, and 5 from their plans. Deferring Floor 6 was temporary.
+22. Fix incomplete multi-floor generation rather than merely declaring five
+    floors in the UI.
+23. Correct window sills and glazing heights from photos and compass context;
+    do not put floor-level glass in every ordinary room.
+24. Remove outside opaque geometry hiding windows and repair the Floor 5
+    regression caused during that work.
+25. Align both exterior envelopes and interior cores; remove Jenga stacking.
+26. Add the actual Floor 6/penthouse and roofs based on footprints and
+    coherent building design.
+27. Fix greyed/missing Floor 6/roof controls and generation errors.
+28. Correct the lower/south-wing first-floor hallway's apparent offset.
+29. Provide the glazed double-door entries associated with both wings.
+30. Put the two round table/bench sets together in the confirmed CORNER,
+    superseding the earlier loose one-on-either-side description.
+31. Add the requested south-wing glass doors; fix the random tower-side
+    hole and southernmost gap without deleting legitimate features.
+32. Give the lower-wing stair that stops at Floor 2 its west-side discharge
+    with the normal double-door arrangement.
+33. Refine the specific exterior glazing group: three full windows left,
+    narrow sidelight immediately right of the door, and a fourth full
+    window farther right, with cross mullions and door-height glazing.
+34. Restore the wall separating the room alongside the inter-wing stair.
+35. Replace its sunken exterior steps with a supported square porch,
+    three small steps, and connected side rails.
+36. Make the stair exit next to 244A work like the paired exit beside 226.
+37. Correct building-generation/GUI errors, including edit-only operations
+    during Play, without damaging layout or deleting the old working model.
+38. Put fixed glass in front of the piano bay between its flanking entries.
+39. Add vending beside the 205 stair exit between the wings, facing foot traffic.
+40. Correct the unnatural 205 stair-area gap/misalignment.
+41. Add support where the stair by 244A appeared improperly open, preserving
+    the flight and headroom openings rather than blindly sealing them.
+42. Provide usable HVAC service access beside 210.
+43. Make the building-generator window responsive in width and height.
+44. Connect the lower stair entrances rather than leaving an unusable
+    under-stair pocket. Improve south-wing turn landings and headroom
+    throughout repeated stair logic.
+45. Remove crossbar barriers at ascending entrances. Preserve legitimate
+    side/edge rails and test the approach BEFORE the first riser.
+
+Recurring user priorities throughout: inspect the blueprints carefully;
+preserve intended features; increase accuracy substantially; use general
+building sense to catch obvious defects BEFORE delivery; minimize the
+user's role as the person discovering basic geometric errors in Unity.
+
+
+36. LATEST FIXES, EVIDENCE LIMITS, AND OPEN ITEMS
+
+The v6.9 candidate connected the S2 entrance vestibule, corrected its short
+lower run, removed low-headroom slab/under-flight intrusions, balanced the
+two L runs, joined handrail heights, and added floor-opening guards. It
+preserved room/door/window/roof/furniture data, but introduced a guard-placement
+regression at some ordinary ascending entrances.
+
+The v6.9.1 correction removed SIX blocking guard sections:
+- Floor 2, S4 lower-flight entrance.
+- Floor 3, S4 lower-flight entrance.
+- Floor 3, S5 lower-flight entrance.
+- Floor 4, S4 lower-flight entrance.
+- Floor 4, S5 lower-flight entrance.
+- Floor 5, S4 lower-flight entrance.
+
+It kept the other floor-edge guards and the flight/turn side handrails.
+The generated data retained 16 well-guard records, including the older S3
+side guard. These counts describe that candidate only; they are not the
+number of rails another building should have.
+
+Useful reference verification snapshots:
+- The v6.9 analysis checked 3,485 stair walking/headroom/support samples and
+  nine U-turn routes at the model's current 4.20 m storey spacing; it also
+  examined a larger slab-depth setting. These were independent geometry
+  checks, not native Unity execution.
+- The v6.9.1 rail test reproduced the six previous blocked entrances and
+  checked 276 entrance/exit sweeps against 620 emitted handrail beams,
+  finding no remaining blocker under that test representation.
+- Other building data was compared for preservation during the crossbar fix.
+- Prior mesh validation included indices, winding, and float-precision
+  volume checks. Responsive controls and deferred editor operations had
+  their own source/layout checks.
+
+Do NOT copy these numbers into a new completion report as if the new model
+was tested. Rerun appropriate checks on the new artifact. These figures
+also do not establish that every real-world detail of Building 9 is exact.
+
+Specific limitations to carry forward:
+1) No native Unity Editor execution was available for those final deliveries.
+2) Several vertical dimensions, furniture dimensions, roof details, and
+   site contours remain model assumptions/photo estimates.
+3) Floor 1 S5's physical route is explicitly unresolved against the user's
+   general U-stair description.
+4) HVAC access via 212 is a documented implementation interpretation.
+5) A simplified before/after room-route test showed no lost routes; it
+   did not establish complete access to every room. Some simplified checks
+   omitted real external links or treated profiled walls too crudely.
+   Do not label all rooms reachable on that evidence, and do not label
+   the actual building's rooms inaccessible from those simplifications.
+6) Current floor/label/door inventories preserve implementation records;
+   they do not certify perfect extraction of every actual source feature.
+
+If continuing Building 9, resolve only the material open questions with the
+necessary source or short targeted user questions. Keep working on known
+requirements independently. For a new building, use this uncertainty discipline
+from the beginning instead of importing these particular assumptions.
+
+
+37. REFERENCE IMPLEMENTATION INVENTORY FOR CONTINUITY
+
+This is the v6.9.1 implementation snapshot, not a measured room directory.
+Keep the supplied plans authoritative for physical geometry. Door-assembly
+records below supplement numerous openings already cut in traced walls;
+an absent named assembly does not by itself mean a room has no doorway.
+Label totals include nonnumeric and repeated labels; they are not counts
+of distinct occupied rooms. Do not copy this inventory to another building.
+
+Floor 1:
+  Source file: b9-1.pdf.
+  Label records: 72. Main stair-flight records: 9.
+  Displayed label text in current record order:
+  141, 139, 137, 133, 131, 129, 127, 123, 125, 126, 124, 128, 130, 122, 120,
+  118, 132, 116, 119, 117, 115, 117A, 111, 165, 163, 161, 159, 134, 147,
+  151, 155, 143, 145, 153A, 153, 167, 169B, 169A, Men, Women, 169, 102A,
+  102, 105B, 105A, 105, 101, 101D, 101B, 101C, 127A, 114, 101A, 142, 104,
+  104H, 107A, 105C, 103, 103S, 103A, 103H, 103L, 103M, 103N, 103P, 103Q,
+  103R, 103V, 103T, 103U, 124A.
+  Explicit door/opening assemblies:
+  - Elevator 1: elevator opening.
+  - Elevator 2: elevator opening.
+  - Elevator 3: elevator opening.
+  - S3 side exit: single swing opening.
+  - South wing breezeway glass double doors: glazed double-door assembly.
+  - Tower breezeway glass double doors: glazed double-door assembly.
+  - South wing south-end glass double entrance: glazed double-door assembly.
+  - Lower Lobby 142 south glazed sidelight: fixed glazed panel/sidelight.
+  - Lower Lobby 142 glass double entrance: glazed double-door assembly.
+  - Lower Lobby 142 north glazed sidelight: fixed glazed panel/sidelight.
+  - Room 167 west-side breezeway door: glazed single-door assembly.
+  - Room 167 east-side breezeway door: glazed single-door assembly.
+  - Room 169 breezeway door: glazed single-door assembly.
+  - Tower central breezeway glass double entrance: glazed double-door assembly.
+  - Room 103N east exterior door: glazed single-door assembly.
+  - S1 west hallway double doors: glazed double-door assembly.
+  - Room 128 stair-side service door: glazed single-door assembly.
+  Main flight record names:
+  - S1 lower.
+  - S1 upper return.
+  - S2 lower.
+  - S2 upper return.
+  - S4 lower.
+  - S4 upper return.
+  - S5 first drawn flight.
+  - S5 second drawn flight.
+  - S3 single flight - no U return.
+  Facade groups:
+  - West wing - Olive Lane south bay.
+  - West wing - Olive Lane north bays.
+  - West wing - Engineering Meadow.
+
+Floor 2:
+  Source file: b9-2.pdf.
+  Label records: 93. Main stair-flight records: 4.
+  Displayed label text in current record order:
+  Men, 233, 233A, 233B, 233C, 233D, 233E, 233F, 233G, 233H, 233I, 233J, 207,
+  209, 211, 217, 213, 219, 221, 212, 210, 214, 216, 220, 222, 218, 226A,
+  208, 206, 202, 204, 201, 203, 239, 241, 231, 231B, 231A, 227, 227C, 225,
+  225C, 227A, 223, 225A, 225B, 227B, 269, 267, 263, 261, 252, 250, 256, 258,
+  260, 244B, 244, 253, 247, 243, 285, 264, 271, 283, 273, 275, 277, 279,
+  281, 248, 246, 260A, 260B, 246A, 246B, 244D, 262, 262A, 244A, 257, 245,
+  251, 254, 255, 259, Women, 226, HVAC, Women, Men, 207A, 205.
+  Explicit door/opening assemblies:
+  - Elevator 1: elevator opening.
+  - Elevator 2: elevator opening.
+  - Elevator 3: elevator opening.
+  - Left sliding entrance: automatic sliding entrance.
+  - Left adjacent manual entrance: single swing opening.
+  - Right double entrance: double push/pull opening.
+  - 226 paired vestibule doorway: framed opening.
+  - 226 paired vestibule doorway: framed opening.
+  - S1 west hallway double doors: glazed double-door assembly.
+  - Room 207A cupboard doorway: framed opening.
+  - S2 Floor 2 244A side hallway doorway: framed opening.
+  - S2 Floor 2 return-flight side hallway doorway: framed opening.
+  - S3 Floor 2 landing doorway: framed opening.
+  - HVAC service door via 212: service door.
+  Main flight record names:
+  - S4 lower.
+  - S4 upper return.
+  - S5 first drawn flight.
+  - S5 second drawn flight.
+  Facade groups:
+  - West wing - Olive Lane.
+  - West wing - Engineering Meadow.
+  - Tower - Olive Lane.
+  - Tower - Engineering Meadow.
+
+Floor 3:
+  Source file: b9-3-4.pdf.
+  Label records: 39. Main stair-flight records: 4.
+  Displayed label text in current record order:
+  305, 307, 309, 315, 310, 318, 320, 316, 308, 306, 302, 304, 322A, 303,
+  323, 329, 312, 317, 319, 321, 327A, 327, 301A, 301, 335, 333, 335A, 325,
+  324, 324C, 324A, 322, 311, 313, HVAC, Women, Men, 324B, 308A.
+  Explicit door/opening assemblies:
+  - Elevator 1: elevator opening.
+  - Elevator 2: elevator opening.
+  - Elevator 3: elevator opening.
+  - Room 301 wing-roof access door: glazed single-door assembly.
+  Main flight record names:
+  - S4 lower.
+  - S4 upper return.
+  - S5 lower.
+  - S5 upper return.
+  Facade groups:
+  - Tower - Olive Lane.
+  - Tower - Engineering Meadow.
+
+Floor 4:
+  Source file: b9-3-4.pdf.
+  Label records: 36. Main stair-flight records: 4.
+  Displayed label text in current record order:
+  403, 405, 407A, 409, 413, 408, 416, 418, 414, 404B, 404, 402, 401, 421,
+  431, 410, 415, 417, 419, 429, 435, 427, 420, 406, 404A, 437B, 437A, 437,
+  423, 425, 407, 407B, Men, 404C, 420A, 437C.
+  Explicit door/opening assemblies:
+  - Elevator 1: elevator opening.
+  - Elevator 2: elevator opening.
+  - Elevator 3: elevator opening.
+  Main flight record names:
+  - S4 lower.
+  - S4 upper return.
+  - S5 lower.
+  - S5 upper return.
+  Facade groups:
+  - Tower - Olive Lane.
+  - Tower - Engineering Meadow.
+
+Floor 5:
+  Source file: b9-5-6.pdf.
+  Label records: 35. Main stair-flight records: 2.
+  Displayed label text in current record order:
+  503, 507, 507B, 518, 520, 516, 502, 501A, 519, 529, 510, 513, 515, 517,
+  527, 533, Men, 508A, 521, 522, 501, 535, 507A, 523A, 523, 529A, Women,
+  506, 504, 524, 514, 511, 524A, 505, 523B.
+  Explicit door/opening assemblies:
+  - Elevator 1: elevator opening.
+  - Elevator 2: elevator opening.
+  - Elevator 3: elevator opening.
+  Main flight record names:
+  - S4 lower.
+  - S4 upper return.
+  Facade groups:
+  - Tower - Olive Lane.
+  - Tower - Engineering Meadow.
+
+Floor 6:
+  Source file: b9-5-6.pdf.
+  Label records: 5. Main stair-flight records: 0.
+  Displayed label text in current record order:
+  603A, 601, 603, 603B, 604.
+  Explicit door/opening assemblies:
+  - 603B service landing doorway: framed opening.
+  - 603 mechanical room doorway: framed opening.
+  - 601 doorway: framed opening.
+  - 604 doorway: framed opening.
+  - Stair 4 penthouse doorway: framed opening.
+  - Penthouse roof exit: double push/pull opening.
+  - Elevator 3: elevator opening.
+  Main flight record names:
+  - No main outgoing inter-floor flights.
+  Separate service-step records:
+  - 603B service steps 1.
+  - 603B service steps 2.
+
+Roof record names and supporting levels:
+- Lower setback roofs: above Floor 1.
+- Two-storey wing and bridge roof: above Floor 2.
+- Tower roof beside the penthouse: above Floor 5.
+- Penthouse cap roof: above Floor 6.
+
+Reference integrity counts:
+- 6 floor records; 280 total label records.
+- Main flight counts by Floors 1-6: 9, 4, 4, 4, 2, 0.
+- Floor 6 additionally has two short service-step records.
+- 19 dedicated portal-check records and 38 dedicated seam-check records.
+- These check-record counts are partial targeted tests, not a complete
+  proof that every room, wall, or doorway is correct.
+
+
+38. REFERENCE LEGEND AND ROOM-PURPOSE DETAILS
+
+Read the actual legend for every new plan. The Building 9 maps used these
+category cues; they explain the source's diagrammatic floor colors and
+must not be mistaken for verified real-world paint or finish colors:
+- Purple: lecture and presentation spaces.
+- Orange: imagination of design spaces.
+- Yellow: realization of design spaces.
+- Green: department and college areas.
+- Cyan/light blue: offices.
+- Pink: public spaces.
+- Gray: operations and utilities.
+- Black entrance triangles: card-access entrance indications.
+- Red dots: points of interest, not structural columns or stair treads.
+- Numbered diamonds: stair identifiers, not room walls.
+
+Some supplied room-map keys also identified purposes:
+- Floor 1 room 101: Lighting Lab.
+- Floor 1 room 102: Photonics.
+- Floor 1 room 102A: Keck Imaging.
+- Floor 1 room 111: Machines.
+- Floor 1 room 119: Basic Electronics.
+- Floor 1 rooms 129, 139, and 141: Electronic Projects.
+- Floor 1 room 147: Basic Electronics.
+- Floor 2 room 205: ECE Computer Lab.
+- Floor 2 room 253: ET Computer Lab.
+
+These labels help interpret the building but do not authorize inventing
+equipment layouts, interior furniture counts, or machinery absent from
+the evidence. A useful plan-colored inspection view can coexist with
+appropriate photographed exterior materials; source colors are not a
+substitute for physical wall and circulation interpretation.
+
+
+PART VI. FINAL PRODUCTION GATE FOR THE ACTIVE BUILDING
+=====================================================
+
+39. ACCEPTANCE CHECKLIST
+
+Apply this checklist to the building actually requested with this prompt.
+Use PASS, FAIL, PROVISIONAL, or NOT RUN honestly. A previous reference
+project's test result is not a result for the new model. Keep the detailed
+checklist with the project if useful; the user's final chat reply can remain
+short and focused on the files, use instructions, and material limitations.
+
+SOURCE AND SCOPE
+S01. Every supplied relevant sheet has been opened and identified.
+S02. Floor diagrams within combined sheets have been distinguished correctly.
+S03. Compass, legend, source scale, crop/scan distortion, and revision context
+     have been considered.
+S04. Complex cores/openings have been inspected at useful resolution, not
+     only via OCR or a small thumbnail.
+S05. Missing critical evidence and source conflicts are explicitly recorded.
+S06. Confirmed observations, traced facts, derived relationships, and
+     provisional dimensions are separately identified.
+S07. The latest requested floor/roof scope is implemented; earlier temporary
+     deferrals have not silently overridden later additions.
+
+REGISTRATION AND ENVELOPE
+R01. One documented unit system, north reference, origin, and vertical datum.
+R02. Multiple trustworthy interior anchors and exterior planes used together.
+R03. Stair and elevator cores align vertically.
+R04. Continuous exterior planes align without false floor-by-floor scaling.
+R05. Genuine setbacks, low wings, courtyards, bridges, and penthouse footprints
+     remain distinct.
+R06. Corridors meet their actual exterior entrances without sideways offsets.
+R07. Model, collision geometry, overlays, stairs, roofs, and site interfaces
+     use the same registration.
+
+ROOMS, WALLS, OPENINGS, AND CIRCULATION
+P01. All required rooms/subrooms, labels, suffixes, and service spaces retained.
+P02. Shared walls are coherent, without duplicated overlapping room boxes.
+P03. Walls have correct physical thickness, caps, faces, and normals.
+P04. Door apertures occupy the actual source walls and correct sides.
+P05. Each door joins its intended spaces at a supported threshold.
+P06. Multiple adjacent or clustered openings are not collapsed into one.
+P07. Restroom vestibules and privacy routes match the evidence.
+P08. Elevator doors face the serving hall and only serve the evidenced floors.
+P09. No invented buffer corridors or gaps between adjacent cores.
+P10. HVAC/service rooms have a documented meaningful route.
+P11. Interior and required exterior links are represented in access checks.
+P12. No unintended public doorway ends in a sealed under-stair pocket.
+P13. No required room/corridor is supported only by a decorative surface.
+P14. Random side gaps are resolved without filling legitimate apertures.
+
+STAIRS, LANDINGS, AND RAILS
+T01. Each core has explicit floor-to-floor links, continuation, and termination.
+T02. U, L, straight, and open-lobby exceptions match the evidence.
+T03. Ascent directions and turn handedness are correct in world coordinates.
+T04. Stair break marks/partial symbols have not become arbitrary run ends.
+T05. Riser counts, heights, and tread spacing are coherent for each connection.
+T06. Starts/ends meet their landings and slabs without floating, sinking,
+     cracks, or solid caps across the route.
+T07. Turn landings are level and a person-width turning path fits.
+T08. Departure and arrival aprons connect to the correct hallway doors.
+T09. Ordinary enclosures remain, while verified open lobby stairs stay open.
+T10. Neighboring rooms retain their legitimate separating walls.
+T11. Headroom includes treads, turn interiors, approach/arrival spaces, and
+     the actual chosen walking envelope.
+T12. All relevant slabs, walls, lintels, roofs, adjacent flights, and other
+     solids participate in the clearance assessment.
+T13. Support is checked beneath the route, including the last-riser seam.
+T14. Guard spans distinguish drops from real passage gates.
+T15. No horizontal bar or post seals an entry, exit, door, or landing route.
+T16. Horizontal/swept approach checks include the space before the first
+     riser and beyond the last one.
+T17. Tests include the handrail beams/posts actually emitted by the code.
+T18. Side rails and genuine exposed edges remain appropriately protected.
+T19. Handrails join across landings; posts end coherently at the rails.
+T20. Exterior discharge, porch, steps, threshold, and grade form one supported
+     route, with no buried stairs or blocked walking mouth.
+
+WINDOWS AND EXTERIOR DETAIL
+W01. Photo/elevation context supports the façade assignment and direction.
+W02. Ordinary window sills/lower panels differ from full-height entry glazing.
+W03. Different wing/tower window systems are treated appropriately.
+W04. Door clusters, full windows, sidelights, and projecting bays remain distinct.
+W05. Cross mullions or other pane divisions match the actual requested pattern.
+W06. Every opaque layer is opened where glass belongs.
+W07. Frames, piers, beams, and corner returns do not hide the intended glazing.
+W08. Glass, frames, and doors read correctly from both relevant viewing sides.
+W09. Window reveal checks allow legitimate distant courtyard/background walls.
+W10. A façade change has not corrupted another floor or its room data.
+
+SITE, FURNITURE, AND ROOFS
+Q01. Exterior grade meets the correct floor entrances, including uphill entries.
+Q02. Inter-wing paths, aprons, patios, and small exterior stairs are supported.
+Q03. Furniture matches the requested count, corner/side placement, and facing.
+Q04. Furniture and its colliders leave door swings and foot traffic clear.
+Q05. Piano/storefront/projecting bay glazing follows the active brief if present.
+Q06. Roof surfaces cover the appropriate exposed footprints at correct levels.
+Q07. Roofs and parapets avoid occupied upper floors and intended access routes.
+Q08. Top-floor/penthouse geometry follows its own evidence, not a duplicated tower.
+Q09. Top stair/lift continuations stop where the sources say they stop.
+Q10. Unknown vertical/site/roof details remain identified editable assumptions.
+
+UNITY IMPLEMENTATION AND TOOLING
+U01. A complete file and complete required plan data are provided.
+U02. File/class/menu names and required dependencies are explicit and correct.
+U03. Supported API symbols/signatures are verified where version-sensitive.
+U04. The actual final payload decodes and matches the declared floor inventory.
+U05. Optional arrays/objects and derived caches survive ordinary reload/rebuild
+     behavior without pretending empty data is valid.
+U06. Asset folders are actually created at the paths later used by the code.
+U07. Mesh buffers, persisted assets, renderers, and colliders agree.
+U08. Heavy operations are safely scheduled outside fragile GUI passes.
+U09. GUI scopes and GUI-exit control flow are handled correctly.
+U10. Editing/generation operations respect Play-mode restrictions.
+U11. A failed build preserves the previous building and cleans up partial work.
+U12. Undo and generated-object ownership are coherent.
+U13. Active, Render, Reference, Top/Focus, Despawn, roof, and stair controls
+     behave as documented where included.
+U14. Floor-only inspection includes appropriate arriving/departing connections.
+U15. Window width and height both resize usefully; controls reflow without
+     clipping or overlap.
+U16. Version, build stage, full error, and copy-error controls remain accessible.
+U17. Scene save/reopen behavior is verified where an editor is available.
+U18. Native compilation/editor results are distinguished from static or
+     independent geometric checks; unrun checks are not called passes.
+
+PRESERVATION AND DELIVERY
+D01. Unrelated features survive targeted corrections and UI-only changes.
+D02. Existing user scene objects outside generated ownership are preserved.
+D03. The old defect is reproduced by a meaningful regression check where applicable.
+D04. The final code, data, scene assumptions, and reported checks match each other.
+D05. A full downloadable deliverable is supplied rather than repeated huge
+     code dumps or unfinished patch fragments.
+D06. Instructions explain replacing one authoritative script, compiling,
+     opening the correct menu, REGENERATING, inspecting, and saving.
+D07. Critical unresolved details and estimated dimensions are disclosed briefly
+     and precisely instead of hidden behind claims of perfection.
+
+
+40. WHEN A CHECK FAILS OR EVIDENCE IS STILL MISSING
+
+Fix an actual geometry/code defect before calling the build finished. If the
+failure follows from a shared algorithm, check the other applicable floors
+and cores, then stop broadening tests once the relevant changes and remaining
+concerns have been addressed. Do not substitute an endless testing exercise
+for a usable delivered result.
+
+If a critical fact is missing, ask the smallest question that resolves it.
+Examples: which of two contradictory stair paths is physically correct;
+whether a top diagram is an occupied floor or roof plant; a known length or
+floor height needed to establish scale. Do not ask for confirmation of every
+ordinary room opening already drawn clearly.
+
+Where no new measurement exists, keep a labeled editable estimate and
+separate it from verified geometry. If such an estimate prevents a dependable
+claim about a particular feature, identify exactly that feature. Do not use
+a blanket uncertainty disclaimer to avoid careful work on the rest.
+
+If the evidence indicates a verified restriction in the real building,
+preserve and document it rather than silently redesigning the real building.
+If a provisional interpretation creates the restriction, do not assert that
+it must be a real feature merely because your code generated it.
+
+If native Unity execution is unavailable, deliver the artifact after the
+meaningful available checks and give practical native verification steps.
+Say which engine checks were not run. Do not state that source parsing,
+synthetic fixtures, or a good-looking overhead plot proves a complete Unity
+walkthrough passed.
+
+
+41. COMPLETION RESPONSE AND HANDOFF
+
+The final response to the user should lead with the delivered file(s) and
+concrete result, then give short installation/use instructions. Briefly name
+material assumptions, test coverage, and any specific remaining source
+questions. Do not require the user to read the entire technical report to
+install the generator.
+
+Preserve a handoff record inside project documentation, comments, or a
+requested supporting file: sources and revision scope; coordinate/elevation
+conventions; assumptions and unresolved conflicts; special stair/door/site
+exceptions; feature inventory; latest fixes; actual test coverage; and exact
+build instructions. This prevents a later model from undoing hard-won
+corrections or confusing old decisions with new evidence.
+
+Before concluding, inspect the artifact from the perspective of a person
+using the building: enter it, find both hall directions, reach the rooms,
+go through service doors, use both intended stair entrances, ascend, turn,
+arrive, descend, and discharge outdoors. Check the façades and roofs from
+outside as well. If an entrance leads only under a stair, a guard seals the
+first step, a wall hides a window, or a floor stack visibly misaligns, correct
+the cause before treating the work as a finished reconstruction.
+
+Do the requested work with the evidence available, preserve intended details,
+ask only material questions, and deliver a building that has been reasoned
+through as a coherent physical place rather than a collection of plausible
+room boxes.
+
+END INSTRUCTIONS TO THE MODEL RECEIVING THIS FILE
